@@ -1,0 +1,14 @@
+[Unit]
+Description=wirelessTag Service
+After=multi-user.target
+
+[Service]
+Type=simple
+GuessMainPID=yes
+ExecStart=/usr/bin/python /home/openhabian/wirelessTag/wirelessTagProxy.py
+ExecStop=/bin/kill -SIGINT $MAINPID
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
