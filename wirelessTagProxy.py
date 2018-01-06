@@ -7,15 +7,12 @@
 # With thanks to Ben Jones <ben.jones12()gmail.com> for inspiration, see:
 # https://github.com/sumnerboy12/nukiproxy
 
-from bottle import get, post, put, request, run, response, abort
 import os
 import sys
 import ConfigParser
-import json
-import time
-import re
-import requests
 import logging
+import requests
+from bottle import get, put, request, run, response
 
 
 # Script name (without extension) used for config/logfile names
@@ -29,25 +26,13 @@ config.read(INIFILE)
 
 # Use ConfigParser to pick out the settings
 DEBUG = config.getboolean("global", "DEBUG")
-
-PROXY_HOST = config.get("proxy", "PROXY_HOST")
 PROXY_PORT = config.getint("proxy", "PROXY_PORT")
-PROXY_ENDPOINT = config.get("proxy", "PROXY_ENDPOINT")
-
 OPENHAB_HOST = config.get("openhab", "OPENHAB_HOST")
 OPENHAB_PORT = config.getint("openhab", "OPENHAB_PORT")
-OPENHAB_USER = config.get("openhab", "OPENHAB_USER")
-OPENHAB_PASSWORD = config.get("openhab", "OPENHAB_PASSWORD")
 
-OPENHAB_ITEM_LOCKED = config.get("openhab", "OPENHAB_ITEM_LOCKED")
-OPENHAB_ITEM_STATE = config.get("openhab", "OPENHAB_ITEM_STATE")
-OPENHAB_ITEM_STATENAME = config.get("openhab", "OPENHAB_ITEM_STATENAME")
-OPENHAB_ITEM_BATTERYCRITICAL = config.get("openhab", "OPENHAB_ITEM_BATTERYCRITICAL")
-
-
-def update_openhab(item, value):
+def updateOpenhab(item, value):
     url = 'http://%s:%d/rest/items/%s/state' % (OPENHAB_HOST, OPENHAB_PORT, item)
-    headers = { 'Content-Type': 'text/plain' }
+    headers = {'Content-Type': 'text/plain'}
     logging.debug('item: %s, value: %s', item, value)
     requests.put(url, headers=headers, data=value)
 
@@ -60,8 +45,7 @@ def monitor():
 def door(state, tagName):
     logging.debug('Door ' + tagName + ' ' + state)
     item = 'Door' + tagName
-    update_openhab(item, state)
-    
+    updateOpenhab(item, state)
     return
 
 
@@ -73,19 +57,20 @@ def temperature(tagName):
     '''
     try:
         try:
-            data = request.json
+            dat = request.json
         except:
-            logging.warn(tagName + ': JSON not valid')
+            logging.warning(tagName + ': JSON not valid')
             raise ValueError
 
-        if data is None:
-            logging.warn(tagName + ': JSON empty')
+        if dat is None:
+            logging.warning(tagName + ': JSON empty')
             raise ValueError
 
-        temperature = data['Temperature']
-        humidity = data['Humidity']
+        temp = dat['Temperature']
+        humidity = dat['Humidity']
         item = 'Temperature' + tagName
-        update_openhab(item, str(temperature))
+        #updateOpenhab(item, str(temp))
+        updateOpenhab(item, str(temp))
 
     except ValueError:
         response.status = 400
@@ -98,7 +83,7 @@ def temperature(tagName):
 if __name__ == '__main__':
 
     try:
-        logging.basicConfig(filename = DIRNAME + '/' + APPNAME + '.log', filemode='w', level=logging.WARN, format='%(asctime)s %(levelname)s %(message)s')
+        logging.basicConfig(filename = DIRNAME + '/' + APPNAME + '.log', filemode='a', level=logging.WARN, format='%(asctime)s %(levelname)s %(message)s')
         logging.warn('Starting up')
         logging.debug('APPNAME: %s', APPNAME)
         logging.debug('DIRNAME: %s', DIRNAME)
