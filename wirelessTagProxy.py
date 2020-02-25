@@ -39,7 +39,6 @@ def updateOpenhab(item, value):
 @get('/')
 def monitor():
     response.status = 200
-    return
 
 @get('/Door/<state>/<tagName>')
 def door(state, tagName):
