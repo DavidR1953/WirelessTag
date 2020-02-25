@@ -75,7 +75,6 @@ def temperature(tagName):
         return
 
     response.status = 200
-    return
 
 
 if __name__ == '__main__':
