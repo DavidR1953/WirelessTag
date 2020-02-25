@@ -45,7 +45,6 @@ def door(state, tagName):
     logging.debug('Door ' + tagName + ' ' + state)
     item = 'Door' + tagName
     updateOpenhab(item, state)
-    return
 
 
 @put('/Temperature/<tagName>')
