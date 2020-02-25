@@ -39,20 +39,17 @@ def updateOpenhab(item, value):
 @get('/')
 def monitor():
     response.status = 200
-    return
 
 @get('/Door/<state>/<tagName>')
 def door(state, tagName):
     logging.debug('Door ' + tagName + ' ' + state)
     item = 'Door' + tagName
     updateOpenhab(item, state)
-    return
-
 
 @put('/Temperature/<tagName>')
 def temperature(tagName):
-    '''WirelessTag
-        Sends a JSON PUT in the form'
+    '''
+    WirelessTag sends a JSON PUT like this:
          {"Temperature": 23.1234, "Humidity": 11.9876}
     '''
     try:
@@ -69,15 +66,12 @@ def temperature(tagName):
         temp = dat['Temperature']
         humidity = dat['Humidity']
         item = 'Temperature' + tagName
-        #updateOpenhab(item, str(temp))
         updateOpenhab(item, str(temp))
 
     except ValueError:
         response.status = 400
-        return
 
     response.status = 200
-    return
 
 
 if __name__ == '__main__':
