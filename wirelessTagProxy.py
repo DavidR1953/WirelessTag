@@ -14,7 +14,6 @@ import logging
 import requests
 from bottle import get, put, request, run, response
 
-#Test change
 # Script name (without extension) used for config/logfile names
 APPNAME = os.path.splitext(os.path.basename(__file__))[0]
 DIRNAME = os.path.dirname(os.path.abspath(__file__))
@@ -70,6 +69,7 @@ def temperature(tagName):
 
     except ValueError:
         response.status = 400
+        return
 
     response.status = 200
 
