@@ -2,3 +2,6 @@ wirelessTagProxy.log
 nukiproxy.py
 nukiproxy.ini.example
 .vscode/settings.json
+.venv/
+.mypy_cache/
+
