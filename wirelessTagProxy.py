@@ -8,15 +8,9 @@
 # https://github.com/sumnerboy12/nukiproxy
 
 import os
-import sys
 import logging
 import requests
-from bottle import get, put, request, run, response
-
-# Script name (without extension) used for config/logfile names
-APPNAME = os.path.splitext(os.path.basename(__file__))[0]
-DIRNAME = os.path.dirname(os.path.abspath(__file__))
-INIFILE = DIRNAME + "/" + APPNAME + ".ini"
+from bottle import get, put, request, run
 
 DEBUG = True
 PROXY_PORT = 9090
@@ -24,20 +18,17 @@ OPENHAB_PORT = 8080
 
 
 def updateOpenhab(item, value):
-    url = f"http://localhost:{OPENHAB_PORT}/rest/items/{item}/state"
+    #    url = f"http://localhost:{OPENHAB_PORT}/rest/items/{item}/state"
+    # On Windows as of 11Mar20, url to localhost takes 2 seconds, to 127.0.0.1 is immediate
+    url = f"http://127.0.0.1:{OPENHAB_PORT}/rest/items/{item}/state"
     headers = {"Content-Type": "text/plain"}
     logging.debug(f"item: {item}, value: {value}")
     requests.put(url, headers=headers, data=value)
 
 
-@get("/")
-def monitor():
-    response.status = 200
-
-
 @get("/Door/<state>/<tagName>")
 def door(state, tagName):
-    logging.debug("Door " + tagName + " " + state)
+    logging.debug(f"Door {tagName} {state}")
     item = "Door" + tagName
     updateOpenhab(item, state)
 
@@ -67,23 +58,19 @@ def temperature(tagName):
 
 
 if __name__ == "__main__":
+    # Script name (without extension) used for config/logfile names
+    filename, ext = os.path.splitext(os.path.abspath(__file__))
+    logFile = filename + ".log"
 
-    try:
-        logging.basicConfig(
-            filename=DIRNAME + "/" + APPNAME + ".log",
-            filemode="a",
-            level=logging.DEBUG if DEBUG else logging.WARN,
-            format="%(asctime)s %(levelname)s %(message)s",
-        )
-        logging.warning("Starting up")
-        logging.debug("APPNAME: %s", APPNAME)
-        logging.debug("DIRNAME: %s", DIRNAME)
+    logging.basicConfig(
+        filename=logFile,
+        filemode="a",
+        level=logging.DEBUG if DEBUG else logging.INFO,
+        format="%(asctime)s %(levelname)s %(message)s",
+    )
+    logging.info("Starting up")
 
-        if DEBUG:
-            run(host="0.0.0.0", port=PROXY_PORT, debug=True, reloader=True)
-        else:
-            run(host="0.0.0.0", port=PROXY_PORT, quiet=True)
-
-    except KeyboardInterrupt:
-        logging.debug("Exit by Ctrl-C")
-        sys.exit(0)
+    if DEBUG:
+        run(host="0.0.0.0", port=PROXY_PORT, debug=True, reloader=True)
+    else:
+        run(host="0.0.0.0", port=PROXY_PORT, quiet=True)
