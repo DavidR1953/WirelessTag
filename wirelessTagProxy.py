@@ -17,7 +17,7 @@ PROXY_PORT = 9090
 OPENHAB_PORT = 8080
 
 
-def updateOpenhab(item, value):
+def updateOpenhab(item: str, value: str) -> None:
     #    url = f"http://localhost:{OPENHAB_PORT}/rest/items/{item}/state"
     # On Windows as of 11Mar20, url to localhost takes 2 seconds, to 127.0.0.1 is immediate
     url = f"http://127.0.0.1:{OPENHAB_PORT}/rest/items/{item}/state"
@@ -27,14 +27,14 @@ def updateOpenhab(item, value):
 
 
 @get("/Door/<state>/<tagName>")
-def door(state, tagName):
+def door(state: str, tagName: str) -> None:
     logging.debug(f"Door {tagName} {state}")
     item = "Door" + tagName
     updateOpenhab(item, state)
 
 
 @put("/Temperature/<tagName>")
-def temperature(tagName):
+def temperature(tagName: str) -> None:
     """
     WirelessTag sends a JSON PUT like this:
          {"Temperature": 23.12, "Humidity": 11.98, 'Battery': 2.86}
