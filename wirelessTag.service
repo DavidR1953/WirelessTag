@@ -5,7 +5,7 @@ After=multi-user.target
 [Service]
 Type=simple
 GuessMainPID=yes
-ExecStart=/usr/bin/python /home/openhabian/wirelessTag/wirelessTagProxy.py
+ExecStart=/usr/bin/python3 /home/openhabian/wirelessTag/wirelessTagProxy.py
 ExecStop=/bin/kill -SIGINT $MAINPID
 Restart=on-failure
 
