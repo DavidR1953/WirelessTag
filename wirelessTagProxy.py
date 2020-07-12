@@ -18,7 +18,7 @@ OPENHAB_PORT = 8080
 
 
 def updateOpenhab(item: str, value: str) -> None:
-    #    url = f"http://localhost:{OPENHAB_PORT}/rest/items/{item}/state"
+    # url = f"http://localhost:{OPENHAB_PORT}/rest/items/{item}/state"
     # On Windows as of 11Mar20, url to localhost takes 2 seconds, to 127.0.0.1 is immediate
     url = f"http://127.0.0.1:{OPENHAB_PORT}/rest/items/{item}/state"
     headers = {"Content-Type": "text/plain"}
@@ -58,7 +58,7 @@ def temperature(tagName: str) -> None:
 
 
 if __name__ == "__main__":
-    # Script name (without extension) used for config/logfile names
+    # Script name (without extension) used for logfile name
     filename, ext = os.path.splitext(os.path.abspath(__file__))
     logFile = filename + ".log"
 
