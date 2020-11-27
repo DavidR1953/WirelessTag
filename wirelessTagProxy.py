@@ -46,13 +46,8 @@ def temperature(tagName: str) -> None:
     updateOpenhab(item, str(temp))
 
     battery = request.json["Battery"]
-    # Battery voltage is 2.5 for 0%, and 3.1 for 100%
-    base = battery - 2.5
-    if base < 0:
-        base = 0
-    percent = int(base * 100 / 0.6)
-    item = "Battery" + tagName
-    updateOpenhab(item, str(percent))
+    item = "Battery" + tagName + "Volts"
+    updateOpenhab(item, str(battery))
 
     # humidity = request.json["Humidity"]
 

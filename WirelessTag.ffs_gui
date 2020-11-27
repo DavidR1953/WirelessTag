@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FreeFileSync XmlType="GUI" XmlFormat="16">
+<FreeFileSync XmlType="GUI" XmlFormat="17">
     <Compare>
         <Variant>TimeAndSize</Variant>
         <Symlinks>Exclude</Symlinks>
         <IgnoreTimeShift/>
     </Compare>
     <Synchronize>
-        <Variant>TwoWay</Variant>
+        <Variant>Update</Variant>
         <DetectMovedFiles>false</DetectMovedFiles>
         <DeletionPolicy>RecycleBin</DeletionPolicy>
         <VersioningFolder Style="Replace"/>
     </Synchronize>
     <Filter>
         <Include>
-            <Item>*</Item>
+            <Item>\wirelessTag*</Item>
         </Include>
         <Exclude>
             <Item>\System Volume Information\</Item>
@@ -30,7 +30,7 @@
     <FolderPairs>
         <Pair>
             <Left>E:\Projects\openHab\WirelessTag</Left>
-            <Right>X:\wirelessTag</Right>
+            <Right>w:\wirelessTag</Right>
         </Pair>
     </FolderPairs>
     <Errors Ignore="false" Retry="0" Delay="5"/>
@@ -38,6 +38,6 @@
     <LogFolder/>
     <EmailNotification Condition="Always"/>
     <Gui>
-        <MiddleGridView>Action</MiddleGridView>
+        <GridViewType>Action</GridViewType>
     </Gui>
 </FreeFileSync>
